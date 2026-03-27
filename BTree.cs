@@ -1,4 +1,35 @@
-﻿using System.Buffers;
+﻿/*
+ * ===========================================================================
+ * MODULE:          B+ Tree Engine v1.0
+ * AUTHOR:          Koivu
+ * DATE:            2026-03-27
+ * VERSION:         1.0.0
+ * LICENSE:         MIT License
+ * ===========================================================================
+ *
+ * ABSTRACT:
+ * A high-performance, disk-resident B+ Tree implementation featuring 
+ * proactive single-pass balancing. This engine prioritizes search 
+ * efficiency via direct sector mapping for optimized node access.
+ *
+ *
+ * ARCHITECTURAL SPECIFICATION:
+ * - BALANCING:  Top-down proactive splitting/merging (backtrack-free).
+ * - PERSISTENCE: Binary serialization with struct-based element alignment.
+ * - STORAGE:    Stack-based FreeList for efficient sector-level reclamation.
+ * - INTEGRITY:  Integrated Audit suite for cycle and ghost-key detection.
+ *
+ * KEYWORDS: 
+ * Balanced Tree, Disk-Resident, Single-Pass, Sector Reclamation, Persistence.
+ *
+ * ---------------------------------------------------------------------------
+ * Copyright (c) 2026 Koivu.
+ * Licensed under the MIT License.
+ * ---------------------------------------------------------------------------
+ */
+
+
+using System.Buffers;
 using System.Buffers.Binary;
 using System.Collections;
 using System.Text;
