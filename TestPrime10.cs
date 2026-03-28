@@ -57,6 +57,7 @@ namespace UnitTestTen
 
             // 1. Generate sorted data
             string primePath = "prime.txt";
+            Assert.IsTrue(File.Exists(primePath), "Prime file must exist.");
             var data = TestHelper.ReadElementsFromFile(primePath, count); 
 
             // 2. Run Bulk Loader.  Default Capacity (80%).

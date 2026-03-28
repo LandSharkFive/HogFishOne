@@ -136,7 +136,7 @@ namespace HogFishOne
         /// </summary>
         public int GetKey(int index)
         {
-            if (index < 0 || index >= NumKeys) throw new ArgumentOutOfRangeException();
+            if (index < 0 || index >= NumKeys) throw new IndexOutOfRangeException();
             int offset = GetDataOffset(index);
             return BinaryPrimitives.ReadInt32LittleEndian(Buffer.AsSpan(offset, 4));
         }

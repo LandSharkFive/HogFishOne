@@ -70,7 +70,7 @@ namespace HogFishOne
         public BTree(string fileName, int pageSize = 4096)
         {
             if (string.IsNullOrEmpty(fileName))
-                throw new ArgumentException("File name cannot be empty.");
+                throw new ArgumentException("File name is empty.");
 
             if (pageSize < MINPAGESIZE)
                 throw new ArgumentException($"Page size must be at least {MINPAGESIZE} bytes.");
@@ -138,10 +138,10 @@ namespace HogFishOne
         private long CalculateOffset(int id)
         {
             if (id < 0)
-                throw new ArgumentOutOfRangeException(nameof(id), "Cannot be negative.");
+                throw new ArgumentOutOfRangeException("Page Id must be 0 or positive.");
 
-            if (Header.PageSize < 64)
-                throw new ArgumentException(nameof(Header.PageSize));
+            if (Header.PageSize < MINPAGESIZE)
+                throw new ArgumentException("Page Size too small.");
 
             return ((long)Header.PageSize * id) + HeaderSize;
         }
@@ -207,17 +207,14 @@ namespace HogFishOne
         /// </summary>
         public BNode DiskRead(int id)
         {
-            if (id < 0) throw new ArgumentOutOfRangeException(nameof(id), $"Invalid Disk ID: {id}");
+            if (id < 0) throw new IndexOutOfRangeException("Page Id must be 0 or positive.");
 
             MyFileStream.Seek(CalculateOffset(id), SeekOrigin.Begin);
 
-            // We pass Header.Order and Header.PageSize so the BNode knows its 'Rules'
             BNode node = BNode.LoadFromStream(MyReader, Header.PageSize, Header.Order);
 
-            // SAFETY CHECK: If the ID inside the node doesn't match the ID we asked for, 
-            // the 'Streams have been crossed' (corruption).
             if (node.Id != id)
-                throw new Exception($"Corruption detected: Expected Node {id}, but read Node {node.Id}");
+                throw new Exception($"Corruption: Expected Node {id}, but read Node {node.Id}.");
 
             return node;
         }
@@ -230,7 +227,7 @@ namespace HogFishOne
         {
             if (node.Id < 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(node.Id), "Cannot be negative");
+                throw new ArgumentOutOfRangeException(nameof(node.Id), "Page Id must be 0 or positive.");
             }
 
             // 1. Calculate the physical offset in the file
@@ -251,7 +248,7 @@ namespace HogFishOne
         /// </summary>
         public void ZeroNode(int id)
         {
-            if (id < 0) throw new ArgumentOutOfRangeException(nameof(id), "Cannot be negative");
+            if (id < 0) throw new ArgumentOutOfRangeException("Page Id must be 0 or positive.");
 
             // 1. Create buffer on the stack.
             Span<byte> buffer = stackalloc byte[Header.PageSize];
@@ -299,10 +296,10 @@ namespace HogFishOne
                 throw new InvalidDataException("Invalid File Format");
 
             if (Header.PageSize < MINPAGESIZE)
-                throw new ArgumentException("Page Size must be at least {MINPAGESIZE}.");
+                throw new ArgumentException($"Page Size must be at least {MINPAGESIZE}.");
 
             if (Header.Order < MINORDER)
-                throw new ArgumentException("Order must be at least {MINORDER}.");
+                throw new ArgumentException($"Order must be at least {MINORDER}.");
         }
 
 
@@ -334,7 +331,7 @@ namespace HogFishOne
                 // FATAL: Internal nodes must always have valid child pointers. 
                 // A -1 here means the "Kid Table" is corrupted or truncated.
                 if (nextId == -1)
-                    throw new Exception($"TrySearch: Node {node.Id} points to a null child (-1) at index {i}.");
+                    throw new ArgumentException($"Corrupted: Node {node.Id} points to -1 at index {i}.");
 
                 node = DiskRead(nextId);
             }
@@ -1842,7 +1839,7 @@ namespace HogFishOne
             {
                 if (node.NumKeys > Header.Order)
                 {
-                    throw new ArgumentException(nameof(node.NumKeys));
+                    throw new ArgumentOutOfRangeException(nameof(node.NumKeys));
                 }
 
                 for (int i = 0; i <= node.NumKeys; i++)
@@ -1897,7 +1894,7 @@ namespace HogFishOne
 
             // Optional: Check if NodeCount matches what is actually on disk
             if (visited.Count > Header.NodeCount)
-                throw new Exception(message: "Reachable nodes cannot exceed NodeCount");
+                throw new Exception(message: "Reachable nodes cannot exceed NodeCount.");
         }
 
         /// <summary>
@@ -1932,7 +1929,7 @@ namespace HogFishOne
 
                 // 3. Verify Key is within Parent's Range.
                 if (currentKey < min || currentKey > max)
-                    throw new ArgumentException(nameof(currentKey));
+                    throw new ArgumentOutOfRangeException(nameof(currentKey));
 
                 // 4. Recurse into children with updated boundaries.
                 if (!node.Leaf)

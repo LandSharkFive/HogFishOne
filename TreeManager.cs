@@ -30,7 +30,7 @@
 
             // 2. Validate input parameters.
             if (string.IsNullOrEmpty(path))
-                throw new ArgumentException("FileName cannot be empty.");
+                throw new ArgumentException("Path is empty.");
 
             if (PageSize < MINPAGESIZE)
                throw new ArgumentException($"PageSize must be at least {MINPAGESIZE} bytes." );
@@ -53,9 +53,7 @@
             int childrenSize = (Order + 1) * 4; // Int pointers
             int required = metadataSize + keysSize + childrenSize;
             if (Header.PageSize < required)
-            {
-                throw new ArgumentException(nameof(Header.PageSize));
-            }
+                throw new ArgumentException($"Page Size must be at least {required} bytes.");
         }
 
         /// <summary>
@@ -87,9 +85,7 @@
         public void SaveToDisk(BNode node)
         {
             if (node.Id < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(node.Id), "Cannot be negative");
-            }
+                throw new ArgumentOutOfRangeException(nameof(node.Id), "Page Id must be 0 or positive.");
 
             long offset = CalculateOffset(node.Id);
             MyFileStream.Seek(offset, SeekOrigin.Begin);
@@ -102,7 +98,7 @@
         private long CalculateOffset(int disk)
         {
             if (disk < 0)
-                throw new ArgumentOutOfRangeException(nameof(disk), "Cannot be negative");
+                throw new ArgumentOutOfRangeException(nameof(disk), "Page Id must be 0 or positive.");
 
             if (Header.PageSize < MINPAGESIZE)
                 throw new ArgumentException($"Page Size must be at least {MINPAGESIZE} bytes.");

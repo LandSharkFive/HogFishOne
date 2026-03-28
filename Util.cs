@@ -118,7 +118,7 @@ namespace HogFishOne
             if (max < 0) yield break; // No primes for negative numbers
             const int MaxAllowed = 1000000;
             if (max > MaxAllowed) 
-                throw new ArgumentOutOfRangeException(nameof(max), $"Must be less than {MaxAllowed}.");
+                throw new ArgumentOutOfRangeException($"All primes must be less than {MaxAllowed}.");
 
             var isPrime = new BitArray(max + 1, true); // Initialize all to true
 

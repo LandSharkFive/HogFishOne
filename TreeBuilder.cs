@@ -35,7 +35,7 @@
             LeafTarget = Math.Clamp(target, 1, Order - 1);
 
             if (PageSize < MINPAGESIZE)
-                throw new ArgumentException(nameof(PageSize), "Must be at least {MINPAGESIZE} bytes.");
+                throw new ArgumentException($"Page Size must be at least {MINPAGESIZE} bytes.");
 
             if (Order < MINORDER)  
                 throw new ArgumentException("Order must be at least {MINORDER}.");
@@ -80,9 +80,9 @@
         /// </summary>
         public void CreateFromSorted(string path, List<Element> keys)
         {
-            if (string.IsNullOrEmpty(path)) throw new ArgumentException("Path cannot be empty.");
+            if (string.IsNullOrEmpty(path)) throw new ArgumentException("Path is empty.");
             if (keys == null || keys.Count == 0) return;
-            if (!Util.IsSortedList(keys)) throw new ArgumentException(nameof(keys), "Must be sorted.");
+            if (!Util.IsSortedList(keys)) throw new ArgumentException("The keys must be sorted.");
 
             using (Manager = new TreeManager(path, PageSize, Order))
             {
