@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Buffers.Binary;
+using System.Diagnostics;
 
 namespace HogFishOne
 {
@@ -192,6 +193,8 @@ namespace HogFishOne
             int sourceOffset = KidTableStart + (index * KID_SIZE);
             int destOffset = KidTableStart + ((index + 1) * KID_SIZE);
 
+            Debug.Assert(destOffset >= HEADER_SIZE && destOffset + (childrenToShift * KID_SIZE) <= DataAreaStart);
+
             System.Buffer.BlockCopy(Buffer, sourceOffset, Buffer, destOffset, childrenToShift * KID_SIZE);
         }
 
@@ -227,6 +230,7 @@ namespace HogFishOne
             int dataSource = DataAreaStart + (sourceIndex * RECORD_SIZE);
             int dataDest = DataAreaStart + (destIndex * RECORD_SIZE);
 
+            Debug.Assert(dataDest >= DataAreaStart && (dataDest + (count * RECORD_SIZE)) <= PageSize);
             System.Buffer.BlockCopy(Buffer, dataSource, Buffer, dataDest, count * RECORD_SIZE);
         }
 
@@ -451,6 +455,7 @@ namespace HogFishOne
                 // We move the entire block of pointers starting from the left child of the first moved key.
                 int srcKidOffset = KidTableStart + (startIdx * KID_SIZE);
                 int destKidOffset = KidTableStart + (0 * KID_SIZE);
+                Debug.Assert(destKidOffset + ((count + 1) * KID_SIZE) <= destination.DataAreaStart);
                 System.Buffer.BlockCopy(this.Buffer, srcKidOffset, destination.Buffer, destKidOffset, (count + 1) * KID_SIZE);
             }
 
