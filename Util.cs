@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Reflection.PortableExecutable;
 
 namespace HogFishOne
 {
@@ -48,9 +47,8 @@ namespace HogFishOne
         /// </summary>
         public static void PrintList(List<int> list)
         {
-            for (int i = 0; i < list.Count; i += 20)
+            foreach (int[] chunk in list.Chunk(20))
             {
-                var chunk = list.Skip(i).Take(20).ToArray();
                 Console.WriteLine(string.Join(" ", chunk));
             }
             Console.WriteLine();

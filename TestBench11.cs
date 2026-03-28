@@ -128,12 +128,12 @@ namespace UnitTestEleven
                 uniqueKeys.Add(rng.Next(0, range));
             }
 
-            // Convert to Elements and sort by Key.
-            var sortedData = uniqueKeys
+            // Convert to Elements.
+            var randomData = uniqueKeys
                 .Select(k => new Element(k, rng.Next(0, range)))
                 .ToList();
 
-            return sortedData;
+            return randomData;
         }
 
         /// <summary>
