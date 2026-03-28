@@ -79,30 +79,17 @@
 
                 // 2. Print the keys.
                 var list = tree.GetKeys();
-                Console.Write($"Keys: ");
-                for (int i = 0; i < list.Count; i++)
-                {
-                    Console.Write($"{list[i]} ");
-
-                    // Every 20 keys, move to a new line
-                    if ((i + 1) % 20 == 0)
-                    {
-                        Console.WriteLine();
-                    }
-                }
+                Console.Write("Keys: ");
+                Util.PrintList(list);
                 Console.WriteLine();
 
                 // 3. Test Search.
                 Console.WriteLine("\n--- Testing TrySearch ---");
                 int searchKey = 30;
                 if (tree.TrySearch(searchKey, out Element found))
-                {
                     Console.WriteLine($"Success: Found {searchKey} with value: {found.Data}");
-                }
                 else
-                {
                     Console.WriteLine($"Failure: Could not find {searchKey}");
-                }
 
                 // 3. Print the Leaf Chain.
                 tree.PrintLeafChain();
@@ -137,19 +124,9 @@
                 Console.WriteLine($"Key Count: {keyCount}");
 
                 var list = tree.GetKeys();
-                Console.Write($"Keys: ");
-                for (int i = 0; i < list.Count; i++)
-                {
-                    Console.Write($"{list[i]} ");
-
-                    // Every 20 keys (starting from index 19, 39, etc.), add a newline
-                    if ((i + 1) % 20 == 0)
-                    {
-                        Console.WriteLine();
-                    }
-                }
+                Console.Write("Keys: ");
+                Util.PrintList(list);
                 Console.WriteLine();
-
 
                 // 2. Verify Tree Height (Logarithmic)
                 // For Order 4, 100 items should be about 4-5 levels deep.
@@ -183,7 +160,7 @@
         {
             Console.WriteLine($"--- Starting Random Insertion Test ---");
             string outFile = "data.db";
-            File.Delete(outFile); 
+            File.Delete(outFile);
 
             Random rnd = new Random();
             HashSet<int> insertedKeys = new HashSet<int>();
@@ -208,11 +185,7 @@
 
                 var list = tree.GetKeys();
                 Console.Write($"Keys: ");
-                for (int i = 0; i < list.Count; i += 20)
-                {
-                    list.Skip(i).Take(20).ToList().ForEach(k => Console.Write($"{k} "));
-                    Console.WriteLine();
-                }
+                Util.PrintList(list);
                 Console.WriteLine();
 
                 // 2. Display the Tree (to see those Level 0-6 splits)

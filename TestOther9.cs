@@ -38,12 +38,12 @@ namespace UnitTestNine
                 string[] lines = File.ReadAllLines(tempFile);
 
                 // Check if we got all 20 keys
-                Assert.AreEqual(20, lines.Length, "Should have 20 lines.");
+                Assert.AreEqual(20, lines.Length, "Missing lines");
 
                 // Check the lines.
-                Assert.AreEqual("1, 10", lines[0]);
-                Assert.AreEqual("10, 100", lines[9]);
-                Assert.AreEqual("20, 200", lines[19]);
+                string[] actual = lines.Take(5).ToArray();
+                string[] expected = { "1, 10", "2, 20", "3, 30", "4, 40", "5, 50" };
+                CollectionAssert.AreEqual(expected, actual, "The lines should match.");
             }
 
             // Cleanup

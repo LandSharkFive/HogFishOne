@@ -45,9 +45,9 @@ namespace HogFishOne
         /// <summary>
         /// Print a list.
         /// </summary>
-        public static void PrintList(List<int> list)
+        public static void PrintList(List<int> list, int count = 20)
         {
-            foreach (int[] chunk in list.Chunk(20))
+            foreach (int[] chunk in list.Chunk(count))
             {
                 Console.WriteLine(string.Join(" ", chunk));
             }

@@ -187,7 +187,7 @@ namespace UnitTestTwo
                 var keys = Enumerable.Range(1, 100).ToList();
                 foreach (var k in keys) tree.Insert(k,k);
 
-                var random = new Random(42); // Seeded for reproducibility
+                var random = new Random(); 
                 var shuffle = keys.OrderBy(x => random.Next()).ToList();
 
                 foreach (var k in shuffle)

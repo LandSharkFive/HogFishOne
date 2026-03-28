@@ -59,7 +59,7 @@ namespace UnitTestFour
 
             using (var tree = new BTree(path, 256))
             {
-                var random = new Random(42);
+                var random = new Random();
                 var keys = new HashSet<int>();
 
                 while (keys.Count < count)
